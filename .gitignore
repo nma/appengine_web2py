@@ -1,5 +1,8 @@
 .DS_store
 .*.un~
+*.swp
 /pretashop
 /a12modules
 /a12theme
+*.pyc
+/web2py/gluon/contrib

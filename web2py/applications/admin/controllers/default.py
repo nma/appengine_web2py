@@ -7,6 +7,7 @@ if EXPERIMENTAL_STUFF:
         response.view = response.view.replace('default/', 'default.mobile/')
         response.menu = []
 
+import logging
 import re
 from gluon.admin import *
 from gluon.fileutils import abspath, read_file, write_file
@@ -95,7 +96,7 @@ def get_app(name=None):
 
 def index():
     """ Index handler """
-
+    logging.debug('entered admin/index processing.')
     send = request.vars.send
     if DEMO_MODE:
         session.authorized = True
