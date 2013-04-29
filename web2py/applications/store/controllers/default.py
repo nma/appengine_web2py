@@ -1,8 +1,17 @@
+import traceback
+import ProductPin as pin
+
+pin = ProductPin()
+
 # list of products
 def index():
-   products = db(db.product).select(orderby=db.product.sortable)
-   categories = db(db.category).select(orderby=db.category.name)
-   return locals()
+    products = db(db.product).select(orderby=db.product.sortable)
+    categories = db(db.category).select(orderby=db.category.name)
+    return locals()
+
+def products_callback():
+    
+    return 
 
 # login, registration, etcetera
 def user():

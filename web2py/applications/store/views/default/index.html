@@ -11,12 +11,44 @@
 {{pass}}
 </table>
 
-{{block statusbar}}
-    <div class="">
-        <ul class="sf-menu sf-js-enabled sf-shadow">
-        {{for category in categories:}}
-            <li><a href="#">{{=category.name}}</a></li>
-        {{pass}}
-        </ul>
+<h1>Products in PinBoard Style</h1>
+<div id="pins">
+{{for p in products:}}
+  <div class="pin">
+    <a href="{{=URL('download',args=p.image)}}" >
+      <img class="image-wrapper" src="{{=URL('download',args=p.image)}}"/>
+    </a>
+    <div class="pin-footer clearfix"> 
+      <div>
+        {{=p.name}} - ${{=p.price}}
+      </div>
     </div>
+  </div>
+{{pass}}
+</div>
+<div class="spinner"></div>
+
+
+
+
+{{block statusbar}}
+<div>
+  <ul class="sf-menu sf-js-enabled sf-shadow">
+    <li><a href="#">New Box</a></li>
+    <li><a href="#">Brands</a></li>
+    <li><a href="#">Top Lists</a></li>
+    <li><a href="#">Hello</a></li>
+    <li><a href="#">World</a></li>
+  </ul>
+</div>
+
+<!-- AddToAny BEGIN -->
+<div style="float:right; padding-top: .25em;" class="a2a_kit a2a_default_style">
+  <a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a></div>
+  <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+<!-- AddToAny END -->
+{{end}}
+
+{{block footer}}
+<h1>foooter goes here</h1>
 {{end}}
