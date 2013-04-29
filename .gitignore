@@ -5,4 +5,6 @@
 /a12modules
 /a12theme
 *.pyc
-/web2py/gluon/contrib
+/web2py/gluon/contrib/
+
+
