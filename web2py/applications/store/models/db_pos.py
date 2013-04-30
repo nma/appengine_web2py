@@ -4,7 +4,7 @@ db.define_table('product',
    Field('price','double'),
    Field('description','text'),
    Field('image','upload'),
-   Field('sortable','integer'),
+   Field('sortable','integer',notnull=True,unique=True),
    auth.signature,
    format='%(name)s')
 

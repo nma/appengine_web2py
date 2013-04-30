@@ -17,7 +17,7 @@
     -webkit-box-shadow: 0 1px 0 #bbb;
        -moz-box-shadow: 0 1px 0 #bbb;
             box-shadow: 0 1px 0 #bbb;
-    display: none;
+    /*display: none;*/
     position: absolute;
     width: 220px;
 }
@@ -62,10 +62,10 @@
             border-top-right-radius: 3px;
     cursor: -webkit-zoom-in;
     cursor:    -moz-zoom-in;
-    display: none;
+    /*display: none;*/
     margin: 0;
     padding: 0;
-    width: 240px;
+    width: 220px;
 }
 
 .pin p {

@@ -1,0 +1,33 @@
+        {{#each pins}}
+        <div class="pin" data-id="{{sortable}}">
+            {{#if editable}}
+                <div class="editable">
+                    <div class="borderable">
+                        <i class="icon-white icon-trash" data-id="{{sortable}}"></i>
+                    </div>
+                    <div class="borderable">
+                        <i class="icon-white icon-pencil" data-id="{{sortable}}"></i>
+                    </div>
+                </div>
+            {{/if}}
+            <a href="{{image.src}}" class="lightbox" data-id="{{sortable}}">
+                <div class="image-wrapper" style="width: 220px; >
+                    <img src="{{image.src}}" width="220"/>
+                </div>
+            </a>
+            {{#if description}}
+                <p>{{description}}</p>
+            {{/if}}
+            <div class="pin-footer clearfix">
+                <div class="text pull-right">
+                    <span class="dim">{{name}} - {{price}}</span>
+                    {{#if tags}}
+                        <span class="dim">in</span>
+                    {{#each tags}}
+                        <span class="tag"><a href="/pins/tag/{{this}}/">{{this}}</a></span>
+                    {{/each}}
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        {{/each}}

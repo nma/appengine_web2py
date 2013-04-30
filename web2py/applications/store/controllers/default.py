@@ -1,7 +1,7 @@
 import traceback
-import ProductPin as pin
+#import ProductPin as pin
 
-pin = ProductPin()
+#pin = ProductPin()
 
 # list of products
 def index():
@@ -9,9 +9,18 @@ def index():
     categories = db(db.category).select(orderby=db.category.name)
     return locals()
 
-def products_callback():
+def product_callback():
+    if (request.vars.order):
+        print request.vars.order    
+    else:
+        print 'fail order'
     
-    return 
+    if (request.vars.offset):
+        print request.vars.offset
+    else:
+        print 'fail offset'
+    
+    return dict()
 
 # login, registration, etcetera
 def user():
@@ -25,7 +34,6 @@ def download():
 def call():
     session.forget()
     return service()
-
 
 # an action to see and process a shopping cart
 @auth.requires_login()
@@ -46,38 +54,38 @@ def buy():
     invoice = str(uuid.uuid4())
     total = sum(db.product(id).price*qty for id,qty in session.cart.items())
     form = SQLFORM.factory(
-               Field('creditcard',default='4427802641004797',requires=IS_NOT_EMPTY()),
-               Field('expiration',default='12/2012',requires=IS_MATCH('\d{2}/\d{4}')),
-               Field('cvv',default='123',requires=IS_MATCH('\d{3}')),
-               Field('shipping_address',requires=IS_NOT_EMPTY()),
-               Field('shipping_city',requires=IS_NOT_EMPTY()),
-               Field('shipping_state',requires=IS_NOT_EMPTY()),
-               Field('shipping_zip_code',requires=IS_MATCH('\d{5}(\-\d{4})?')))                           
+            Field('creditcard',default='4427802641004797',requires=IS_NOT_EMPTY()),
+            Field('expiration',default='12/2012',requires=IS_MATCH('\d{2}/\d{4}')),
+            Field('cvv',default='123',requires=IS_MATCH('\d{3}')),
+            Field('shipping_address',requires=IS_NOT_EMPTY()),
+            Field('shipping_city',requires=IS_NOT_EMPTY()),
+            Field('shipping_state',requires=IS_NOT_EMPTY()),
+            Field('shipping_zip_code',requires=IS_MATCH('\d{5}(\-\d{4})?')))                           
     if form.accepts(request,session):
         if process(form.vars.creditcard,form.vars.expiration,
-                   total,form.vars.cvv,0.0,invoice,testmode=True):
+                total,form.vars.cvv,0.0,invoice,testmode=True):
             for key, value in session.cart.items():
                 db.sale.insert(invoice=invoice,
-                               buyer=auth.user.id,
-                               product = key,
-                               quantity = value,
-                               price = db.product(key).price,
-                               creditcard = form.vars.creditcard,
-                               shipping_address = form.vars.shipping_address,
-                               shipping_city = form.vars.shipping_city,
-                               shipping_state = form.vars.shipping_state,
-                               shipping_zip_code = form.vars.shipping_zip_code)
-            session.cart.clear()          
+                        buyer=auth.user.id,
+                        product = key,
+                        quantity = value,
+                        price = db.product(key).price,
+                        creditcard = form.vars.creditcard,
+                        shipping_address = form.vars.shipping_address,
+                        shipping_city = form.vars.shipping_city,
+                        shipping_state = form.vars.shipping_state,
+                        shipping_zip_code = form.vars.shipping_zip_code)
+                session.cart.clear()          
             session.flash = 'Thank you for your order'
             redirect(URL('invoice',args=invoice))               
         else:
             response.flash = "payment rejected (please call XXX)"
     return dict(cart=session.cart,form=form,total=total)
-    
+
 @auth.requires_login()
 def invoice():
     return dict(invoice=request.args(0))
-    
+
 # an action to add and remove items from the shopping cart
 def cart_callback():
     id = int(request.vars.id)
@@ -91,23 +99,23 @@ def cart_callback():
 def myorders():
     orders = db(db.sale.buyer==auth.user.id).select(orderby=~db.sale.created_on) 
     return dict(orders=orders)
-    
+
 @auth.requires_membership('manager')
 def products():
     products = db(db.product).select()
     return dict(products=products)
-    
+
 @auth.requires_membership('manager')
 def edit_product():
     form = crud.update(db.product,request.args(0))
     return dict(form=form)
-    
+
 @auth.requires_membership('manager')
 def users():
     db.auth_user.id.represent=lambda id:A('info',_href=URL('info_user',args=id))
     form,items = crud.search(db.auth_user)
     return dict(form=form,users=items)
-    
+
 @auth.requires_membership('manager')
 def info_user():
     form = crud.read(db.auth_user,request.args(0))

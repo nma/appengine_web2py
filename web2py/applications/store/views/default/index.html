@@ -1,4 +1,5 @@
 {{extend 'layout.html'}}
+<!--Content-->
 <h1>Products</h1>
 <table>
 {{for p in products:}}
@@ -16,7 +17,7 @@
 {{for p in products:}}
   <div class="pin">
     <a href="{{=URL('download',args=p.image)}}" >
-      <img class="image-wrapper" src="{{=URL('download',args=p.image)}}"/>
+      <img class="image-wrapper" src="{{=URL('download',args=p.image)}}" width="220px"/>
     </a>
     <div class="pin-footer clearfix"> 
       <div>
@@ -27,9 +28,15 @@
 {{pass}}
 </div>
 <div class="spinner"></div>
-
-
-
+<!--End Content-->
+<!--Templates-->
+<script id="pins-template" type="text/x-handlebars-template"></script>
+<script type="text/javascript">
+  $('#pins-template').load('{{=URL('static','pin.hbs')}}')
+</script>
+<!--End Templates-->
+<script src="{{=URL('static','js/web2pin.js')}}" type="text/javascript">
+</script>
 
 {{block statusbar}}
 <div>

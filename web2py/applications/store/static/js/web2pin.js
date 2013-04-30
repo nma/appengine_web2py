@@ -3,7 +3,7 @@ $(window).load(function() {
         var blockContainer = $('#pins'),
             blocks = blockContainer.children('.pin'),
             blockMargin = 15,
-            blockWidth = 225,
+            blockWidth = 220,
             rowSize = Math.floor(blockContainer.width()/(blockWidth+blockMargin)),
             colHeights = [],
             rowMargins = [],
@@ -14,7 +14,7 @@ $(window).load(function() {
         // Fill out our rowMargins with which will be static after this
         for (var i = 0; i < rowSize; i++) {
             // Our first item has a special margin to keep things centered
-            if (i == 0) rowMargins[0] = (blockContainer.width()-rowSize*(blockWidth+blockMargin));
+            if (i == 0) rowMargins[0] = (blockContainer.width()-rowSize*(blockWidth+blockMargin))/2;
             else rowMargins[i] = rowMargins[i-1]+(blockWidth+blockMargin);
         }
         // Loop through every block
@@ -34,9 +34,8 @@ $(window).load(function() {
             colHeights[sCol] += block.height()+(blockMargin);
         }
 
-        // edit functions here
-
-
+        // other functions here
+        
         $('.spinner').css('display', 'none');
         blockContainer.css('height', colHeights.sort().slice(-1)[0]);
     }
@@ -47,26 +46,61 @@ $(window).load(function() {
      */
     function loadPins() {
         // Show our loadin symbol
-        $('.spinner').css('display', 'block')
+        $('.spinner').css('display', 'block');
 
         // Fetch our pins from the api using our current offset
-        var apiUrl = '/store/default/products_callback/?format=json&order_by=-id&offset='+String(offset);
+        //var apiUrl = '/store/default/products_callback/?format=json&order_by=-id&offset='+String(offset);
+        var apiUrl = '/store/default/product_callback?order=~sortable&offset='+String(offset)
+        
         //if (priceLow) apiUrl = apiUrl + '&priceLow=' + priceLow
         //if (priceHigh) apiUrl = apiUrl + '&priceHigh=' + priceHigh
         //if (typeFilter) apiUrl = apiUrl +  '&type=' + typeFilter
         //if (brandFilter) apiUrl = apiUrl + '&brand=' + brandFilter
-        
-        $.get(apiUrl, functions(pins) {
+        apiUrl = apiUrl + '.json'
+        alert(""+apiUrl);
+
+        $.get(apiUrl, function(pins) {
+            alert("got the pins");
             // Set which items are editable by the current user
             for (var i = 0; i < pins.objects.length; i++) {
+                
+                // Use the fecthed pins as our context for our pins template 
+                var template = Handlebars.comile($('#pins-template').html());
+                var html = template({pins: pins.objects});
 
-                // 
+                // Append the newly compiled data to our container
+                $('#pins').append(html);
+
+                // We need to then wait for images to load in and then tile
+                tileLayout();
+
+                $('#pins').ajaxStop(function() {
+                    $('img').load(function() {
+                        $(this).fadeIn(300);
+                    });
+                });
+
+                
             }
         });
+
+        // Up our offset, it's currently defined as 50 in our settings
+        offset += 20;
     }
+
+    var offset = 0;
+    //loadPins();
     
+    tileLayout();
     // If our window gets resized keep the tiles looking clean and in our window
     $(window).resize(function() {
         tileLayout();
     })
+
+    // If we scroll to the bottom of the documnet load more pins
+    /*$(window).scroll(function() {
+        var windowPosition = $(window).scrollTop() + $(window).height();
+        var bottom = $(document).height() - 100;
+        if (windowPosition > bottom) loadPins();
+    });*/
 });
