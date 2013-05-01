@@ -50,13 +50,13 @@ $(window).load(function() {
 
         // Fetch our pins from the api using our current offset
         //var apiUrl = '/store/default/products_callback/?format=json&order_by=-id&offset='+String(offset);
-        var apiUrl = '/store/default/product_callback?order=~sortable&offset='+String(offset)
+        var apiUrl = '/store/api/product?order=~sortable+offset='+String(offset)
         
         //if (priceLow) apiUrl = apiUrl + '&priceLow=' + priceLow
         //if (priceHigh) apiUrl = apiUrl + '&priceHigh=' + priceHigh
         //if (typeFilter) apiUrl = apiUrl +  '&type=' + typeFilter
         //if (brandFilter) apiUrl = apiUrl + '&brand=' + brandFilter
-        apiUrl = apiUrl + '.json'
+        apiUrl = apiUrl + '.load'
         alert(""+apiUrl);
 
         $.get(apiUrl, function(pins) {
@@ -73,7 +73,7 @@ $(window).load(function() {
 
                 // We need to then wait for images to load in and then tile
                 tileLayout();
-
+                lightbox();
                 $('#pins').ajaxStop(function() {
                     $('img').load(function() {
                         $(this).fadeIn(300);
@@ -95,7 +95,8 @@ $(window).load(function() {
     // If our window gets resized keep the tiles looking clean and in our window
     $(window).resize(function() {
         tileLayout();
-    })
+        lightbox();
+    });
 
     // If we scroll to the bottom of the documnet load more pins
     /*$(window).scroll(function() {

@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
 
+#
+# Api for 
+#
 
+from gluon import current
 print "check check"
 """
   Alice12 Product Pins API

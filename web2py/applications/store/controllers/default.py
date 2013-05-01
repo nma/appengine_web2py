@@ -1,26 +1,19 @@
-import traceback
+import sys, traceback
 #import ProductPin as pin
 
 #pin = ProductPin()
 
 # list of products
 def index():
+    try:
+        from PIL import Image
+    except:
+        print sys.version
+        traceback.print_exc(file=sys.stdout) 
+
     products = db(db.product).select(orderby=db.product.sortable)
     categories = db(db.category).select(orderby=db.category.name)
     return locals()
-
-def product_callback():
-    if (request.vars.order):
-        print request.vars.order    
-    else:
-        print 'fail order'
-    
-    if (request.vars.offset):
-        print request.vars.offset
-    else:
-        print 'fail offset'
-    
-    return dict()
 
 # login, registration, etcetera
 def user():

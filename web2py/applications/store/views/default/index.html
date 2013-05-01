@@ -8,6 +8,7 @@
     <td><img src="{{=URL('download',args=p.image)}}" height="100px"/></td>
     <td>{{=MARKMIN(p.description)}}</td>    
     <td><span id="{{="item%s"%p.id}}">{{=session.cart.get(p.id,0)}}</span> in cart - {{=A('add to cart',callback=URL('cart_callback',vars=dict(id=p.id,action='add')),target='item%s'%p.id,_class='button pill')}}</td>
+    <td>{{=p.image_src}}</td>
   </tr>  
 {{pass}}
 </table>
@@ -16,7 +17,7 @@
 <div id="pins">
 {{for p in products:}}
   <div class="pin">
-    <a href="{{=URL('download',args=p.image)}}" >
+    <a href="{{=p.image_src}}" >
       <img class="image-wrapper" src="{{=URL('download',args=p.image)}}" width="220px"/>
     </a>
     <div class="pin-footer clearfix"> 
@@ -30,8 +31,10 @@
 <div class="spinner"></div>
 <!--End Content-->
 <!--Templates-->
+<script id="lightbox-template" type="text/x-handlebars-template"></script>
 <script id="pins-template" type="text/x-handlebars-template"></script>
 <script type="text/javascript">
+  $('#lightbox-template').load('{{=URL('static','lightbox.hbs')}}')
   $('#pins-template').load('{{=URL('static','pin.hbs')}}')
 </script>
 <!--End Templates-->

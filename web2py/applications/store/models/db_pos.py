@@ -1,12 +1,20 @@
+from images import THUMB
+
 # we need a table to store products
 db.define_table('product',
    Field('name',notnull=True,unique=True),
    Field('price','double'),
    Field('description','text'),
    Field('image','upload'),
+   Field('image_src','text'),
+   #Field('thumbnail','upload'),
    Field('sortable','integer',notnull=True,unique=True),
    auth.signature,
    format='%(name)s')
+
+db.product.image_src.compute = lambda row: URL('download', row.image)
+#db.product.thumbnail.compute = lambda row: THUMB(row.image, nx=220)
+
 
 # and one table to store product categories
 db.define_table('category',
