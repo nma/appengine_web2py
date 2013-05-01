@@ -6,5 +6,9 @@
 /a12theme
 *.pyc
 /web2py/gluon/contrib/
-
-
+/web2py/applications/*/databases
+/web2py/applications/*/errors
+/web2py/applications/*/sessions
+httpserver.log
+parameters_*.py
+*.w2p
