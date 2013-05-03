@@ -50,38 +50,34 @@ $(window).load(function() {
 
         // Fetch our pins from the api using our current offset
         //var apiUrl = '/store/default/products_callback/?format=json&order_by=-id&offset='+String(offset);
-        var apiUrl = '/store/api/product?order=~sortable+offset='+String(offset)
+        var apiUrl = '/store/api/products?offset='+String(offset)
         
         //if (priceLow) apiUrl = apiUrl + '&priceLow=' + priceLow
         //if (priceHigh) apiUrl = apiUrl + '&priceHigh=' + priceHigh
         //if (typeFilter) apiUrl = apiUrl +  '&type=' + typeFilter
         //if (brandFilter) apiUrl = apiUrl + '&brand=' + brandFilter
-        apiUrl = apiUrl + '.load'
-        alert(""+apiUrl);
 
-        $.get(apiUrl, function(pins) {
-            alert("got the pins");
+        $.getJSON(apiUrl, function(pins) {
             // Set which items are editable by the current user
-            for (var i = 0; i < pins.objects.length; i++) {
+            //for (var i = 0; i < pins.objects.length; i++) {
+                // do processing here on editable commands
+            //}
                 
-                // Use the fecthed pins as our context for our pins template 
-                var template = Handlebars.comile($('#pins-template').html());
-                var html = template({pins: pins.objects});
+            // Use the fecthed pins as our context for our pins template 
+            var template = Handlebars.compile($('#pins-template').html());
+            var html = template({pins: pins.objects});
 
-                // Append the newly compiled data to our container
-                $('#pins').append(html);
+            // Append the newly compiled data to our container
+            $('#pins').append(html);
 
-                // We need to then wait for images to load in and then tile
-                tileLayout();
-                lightbox();
-                $('#pins').ajaxStop(function() {
-                    $('img').load(function() {
-                        $(this).fadeIn(300);
-                    });
+            // We need to then wait for images to load in and then tile
+            tileLayout();
+            //lightbox();
+            $('#pins').ajaxStop(function() {
+                $('img').load(function() {
+                    $(this).fadeIn(300);
                 });
-
-                
-            }
+            });
         });
 
         // Up our offset, it's currently defined as 50 in our settings
@@ -89,13 +85,12 @@ $(window).load(function() {
     }
 
     var offset = 0;
-    //loadPins();
+    loadPins();
     
-    tileLayout();
     // If our window gets resized keep the tiles looking clean and in our window
     $(window).resize(function() {
         tileLayout();
-        lightbox();
+        //lightbox();
     });
 
     // If we scroll to the bottom of the documnet load more pins

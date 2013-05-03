@@ -3,6 +3,7 @@ from pprint import pprint
 
 def products():
     ''' 
+    #DEBUG CODE -- and sample request calls
     response = ""
    
     response += request.url + ", "
@@ -18,6 +19,7 @@ def products():
             response += "(" +key +"," +item +"), "
     
     '''
+    data_dict={}
     offset_param = request.vars.offset
     if offset_param:
         offset = int(offset_param)
@@ -28,7 +30,8 @@ def products():
         filtered_models = []
         for field in [row for row in product_rows]:
             item = field.as_dict()
-
+            
+            # filtering unwanted information from product model  
             del item['image']
             del item['image_blob']
             del item['created_on']
@@ -38,8 +41,12 @@ def products():
 
             filtered_models.append(item)
 
+        data_dict['objects'] = filtered_models
+        
         import gluon.contrib.simplejson
-        return gluon.contrib.simplejson.dumps(filtered_models)
-    
+        return gluon.contrib.simplejson.dumps(data_dict)
+   
+    # else dump empty json list
+    data_dict['objects'] = []
     import gluon.contrib.simplejson
-    return gluon.contrib.simplejson.dumps([])
+    return gluon.contrib.simplejson.dumps(data_dict)

@@ -12,9 +12,8 @@ db.define_table('product',
    auth.signature,
    format='%(name)s')
 
-db.product.image_src.compute = lambda row: URL('download', row.image)
+db.product.image_src.compute = lambda row: URL('default', 'download', args=row.image)
 #db.product.thumbnail.compute = lambda row: THUMB(row.image, nx=220)
-
 
 # and one table to store product categories
 db.define_table('category',
