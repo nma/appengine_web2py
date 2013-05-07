@@ -57,12 +57,13 @@ $(window).load(function() {
         //if (typeFilter) apiUrl = apiUrl +  '&type=' + typeFilter
         //if (brandFilter) apiUrl = apiUrl + '&brand=' + brandFilter
 
-        $.getJSON(apiUrl, function(pins) {
+        $.get(apiUrl, function(pins) {
             // Set which items are editable by the current user
             //for (var i = 0; i < pins.objects.length; i++) {
                 // do processing here on editable commands
             //}
-                
+             
+            console.log(pins);
             // Use the fecthed pins as our context for our pins template 
             var template = Handlebars.compile($('#pins-template').html());
             var html = template({pins: pins.objects});
@@ -72,7 +73,7 @@ $(window).load(function() {
 
             // We need to then wait for images to load in and then tile
             tileLayout();
-            //lightbox();
+            lightbox();
             $('#pins').ajaxStop(function() {
                 $('img').load(function() {
                     $(this).fadeIn(300);
@@ -90,7 +91,7 @@ $(window).load(function() {
     // If our window gets resized keep the tiles looking clean and in our window
     $(window).resize(function() {
         tileLayout();
-        //lightbox();
+        lightbox();
     });
 
     // If we scroll to the bottom of the documnet load more pins

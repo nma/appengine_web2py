@@ -37,16 +37,16 @@ $(window).load(function() {
         $('body').append(renderTemplate('#lightbox-template', context));
         var box = $('.lightbox-background');
         box.css('height', $(document).height());
-        $('.lightbox-image-wrapper').css('height', context.image.standard.height);
+        $('.lightbox-image-wrapper').css('height', 500);
         box.fadeIn(200);
         $('.lightbox-image').load(function() {
             $(this).fadeIn(200);
         });
         $('.lightbox-wrapper').css({
-            'width': context.image.standard.width,
+            'width': 300,
             'margin-top': 70,
             'margin-bottom': 70,
-            'margin-left': -context.image.standard.width/2
+            'margin-left': -300/2
         });
         if ($('.lightbox-wrapper').height()+140 > $(window).height())
             $('.lightbox-background').height($('.lightbox-wrapper').height()+140);
@@ -60,6 +60,13 @@ $(window).load(function() {
         });
     }
     // End View Functions
+
+    function getPinData(id) {
+        var apiUrl = '/store/api/product?id='+String(id);
+        return $.get(apiUrl);
+    }
+
+    function renderTemplate(templateId,context){var template=Handlebars.compile($(templateId).html());return template(context);}
     
     // Start Global Init Function
     window.lightbox = function() {
@@ -68,6 +75,7 @@ $(window).load(function() {
             $(this).off('click');
             $(this).click(function(e) {
                 e.preventDefault();
+                console.log($(this).data('id'));
                 var promise = getPinData($(this).data('id'));
                 promise.success(function(pin) {
                     createBox(pin);

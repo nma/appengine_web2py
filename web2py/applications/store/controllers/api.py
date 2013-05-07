@@ -42,11 +42,44 @@ def products():
             filtered_models.append(item)
 
         data_dict['objects'] = filtered_models
-        
+       
+        response.headers['Content-Type'] = 'application/json'
         import gluon.contrib.simplejson
         return gluon.contrib.simplejson.dumps(data_dict)
    
     # else dump empty json list
     data_dict['objects'] = []
+    import gluon.contrib.simplejson
+    return gluon.contrib.simplejson.dumps(data_dict)
+
+def product():
+    id = request.vars.id
+    data_dict = {}
+
+    if id:
+        target_id = int(id)
+        product = db(db.product).select(db.product.sortable == target_id)
+       
+        print "TEST --- " + str(len(product))
+
+        product_row = []
+        if len(product) > 0:
+            print "TEST -- SEXY"
+            product_row = product[0] 
+       
+        
+            item = product_row.as_dict()
+    
+            del item['image']
+            del item['image_blob']
+            del item['created_on']
+            del item['created_by']
+            del item['modified_by']
+            del item['modified_on']
+            
+            data_dict = item
+
+
+    response.headers['Content-Type'] = 'application/json'
     import gluon.contrib.simplejson
     return gluon.contrib.simplejson.dumps(data_dict)
